@@ -9,7 +9,13 @@
 <ion-content>
   <div *ngIf="allMessages.length" class="my-3 msg-list px-2">
     <div *ngFor="let msg of allMessages" class="mb-2">
-      <span>{{msg.message.msg}}</span>
+      <div *ngIf="msg.message.senderId==userId"  style="
+      margin-left: auto; text-align: right;">
+        <span>{{msg.message.msg}}</span>
+      </div>
+      <div *ngIf="msg.message.senderId == details.id" >
+        <span>{{msg.message.msg}}</span>
+      </div>
     </div>
   </div>
   <div *ngIf="!allMessages.length" class="no-data">

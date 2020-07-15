@@ -49,7 +49,8 @@ export class ChatComponent implements OnInit {
     const obj = {
       msg: data.message,
       senderId: this.userId,
-      reciverId: this.details.id
+      reciverId: this.details.id,
+      createdAt:new Date().toISOString()
     }
     console.log("obj", obj)
     this._userService.addMessage(obj).then((res) => {
@@ -71,9 +72,13 @@ export class ChatComponent implements OnInit {
       });
       console.log("mess",this.allMessages)
       this.allMessages = await this.allMessages.filter(o =>
-        o.message.reciverId == this.details.id
+       ( o.message.reciverId == this.details.id && o.message.senderId== this.userId) ||  ( o.message.senderId == this.details.id && o.message.reciverId== this.userId) 
       );
-      this.allMessages = await this.allMessages.reverse();
+      this.allMessages = await this.allMessages.sort((a:any,b:any)=>{
+        var dateA = new Date(a.message.createdAt).getTime();
+        var dateB = new Date(b.message.createdAt).getTime();
+        return dateA > dateB ? 1 : -1;  
+      });
       this.contentArea.scrollToBottom();
       console.log("all message", this.allMessages)
     }, err => {
